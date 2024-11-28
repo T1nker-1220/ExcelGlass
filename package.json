@@ -1,0 +1,37 @@
+{
+  "name": "excel-glass",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "optimize-logo": "node scripts/optimize-logo.js",
+    "optimize-webp": "node scripts/optimize-webp.js"
+  },
+  "dependencies": {
+    "@emailjs/browser": "^3.12.1",
+    "@heroicons/react": "^2.0.18",
+    "@tailwindcss/forms": "^0.5.6",
+    "@types/leaflet": "^1.9.14",
+    "autoprefixer": "^10.4.15",
+    "framer-motion": "^10.16.4",
+    "leaflet": "^1.9.4",
+    "next": "14.0.4",
+    "postcss": "^8.4.29",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.4",
+    "react-hot-toast": "^2.4.1",
+    "react-intersection-observer": "^9.5.2",
+    "tailwindcss": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.48.0",
+    "eslint-config-next": "13.4.19",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.4",
+    "sharp": "^0.33.5"
+  }
+}
