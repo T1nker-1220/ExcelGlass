@@ -2,18 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['images.unsplash.com'], // Add other image domains as needed
+    domains: ['images.unsplash.com'],
+    unoptimized: true
   },
-  webpack: (config) => {
-    config.watchOptions = {
-      poll: 1000,
-      aggregateTimeout: 300,
-    }
-    return config
-  },
-  experimental: {
-    optimizeCss: true,
-  },
+  output: 'standalone'
 }
 
 module.exports = nextConfig
