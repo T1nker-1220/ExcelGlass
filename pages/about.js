@@ -6,35 +6,34 @@ export default function About() {
   return (
     <>
       <Head>
-        <title>About Us - {companyInfo.name}</title>
+        <title>About Us - Excel Glass & Dorcen Glass</title>
         <meta 
           name="description" 
-          content="Learn about Excel Glass Inc.'s journey since 1994 and our commitment to quality glass etching and aluminum services." 
+          content="Learn about our history, values, and commitment to excellence in glass solutions." 
         />
       </Head>
 
-      <div className="min-h-screen bg-gray-50">
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
+      >
         {/* Hero Section */}
-        <div className="relative bg-primary/95 text-white py-20">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80" />
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center"
-            >
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Story</h1>
-              <p className="text-xl text-gray-100">
+        <div className="relative bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-800 dark:to-blue-900 text-white py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Story</h1>
+              <p className="text-xl text-gray-100 max-w-2xl mx-auto">
                 A Legacy of Excellence in Glass Craftsmanship Since 1994
               </p>
-            </motion.div>
+            </div>
           </div>
         </div>
 
         {/* Main Content */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="prose prose-lg mx-auto">
+          <div className="prose prose-lg mx-auto dark:prose-invert">
             {/* Excel Glass History */}
             <motion.section
               initial={{ opacity: 0, y: 20 }}
@@ -42,8 +41,8 @@ export default function About() {
               transition={{ duration: 0.5 }}
               className="mb-12"
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">The Excel Glass Journey</h2>
-              <div className="space-y-6 text-gray-600">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">The Excel Glass Journey</h2>
+              <div className="space-y-6 text-gray-600 dark:text-gray-300">
                 <p>
                   Excel Glass, Inc. began its remarkable journey in August 1994, initially established under the name EXCELLINK ENTERPRISES. From its inception, the company has been dedicated to producing premium quality glass etched products, serving both individual and corporate markets.
                 </p>
@@ -73,8 +72,8 @@ export default function About() {
               transition={{ duration: 0.5 }}
               className="mb-12"
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Dorcen Glass & Aluminum Supply</h2>
-              <div className="space-y-6 text-gray-600">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Dorcen Glass & Aluminum Supply</h2>
+              <div className="space-y-6 text-gray-600 dark:text-gray-300">
                 <p>
                   Complementing Excel Glass's expertise in glass etching, Dorcen Glass & Aluminum Supply emerged as a comprehensive solution provider for glass and aluminum needs. Located at G/F Unit 4-E, 670 Jolliland Townhomes EDSA, Malibay, Pasay City, Dorcen has established itself as a trusted name in the industry.
                 </p>
@@ -101,8 +100,8 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Values & Commitment</h2>
-              <div className="space-y-6 text-gray-600">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Values & Commitment</h2>
+              <div className="space-y-6 text-gray-600 dark:text-gray-300">
                 <p>
                   At Excel Glass and Dorcen, we take immense pride not only in our services but also in our ability to offer VERY REASONABLE prices without compromising on quality. We understand the importance of working within our clients' budgets while delivering exceptional results.
                 </p>
@@ -122,7 +121,7 @@ export default function About() {
             </motion.section>
           </div>
         </div>
-      </div>
+      </motion.main>
     </>
   );
 }

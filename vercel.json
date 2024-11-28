@@ -1,15 +1,32 @@
 {
   "version": 2,
-  "builds": [
+  "framework": "nextjs",
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "env": {
+    "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "@emailjs_public_key",
+    "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "@emailjs_service_id",
+    "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "@emailjs_template_id",
+    "NEXT_PUBLIC_FACEBOOK_URL": "https://www.facebook.com/excelglass",
+    "NEXT_PUBLIC_INSTAGRAM_URL": "https://www.instagram.com/excelglassph"
+  },
+  "headers": [
     {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
     }
   ]
 }

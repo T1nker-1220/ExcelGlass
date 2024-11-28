@@ -1,15 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./app/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        primary: '#4B79BE',
-        secondary: '#FFD700',
+        primary: '#1e40af',
+        secondary: '#1e3a8a',
         neutral: {
           light: '#F8F9FA',
           dark: '#343A40',
@@ -32,6 +33,14 @@ module.exports = {
           '0%': { transform: 'translateY(20px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+      },
+      backgroundColor: {
+        dark: '#111827',
+        'dark-lighter': '#1f2937',
+      },
+      textColor: {
+        'dark-primary': '#f3f4f6',
+        'dark-secondary': '#d1d5db',
       },
     },
   },

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import emailjs from '@emailjs/browser';
 import toast, { Toaster } from 'react-hot-toast';
 import { PhoneIcon, EnvelopeIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { companyInfo } from '../data/company-info';
+import Link from 'next/link';
 
 // Dynamically import the Map component
 const Map = dynamic(() => import('../components/Map'), {
@@ -62,32 +62,21 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Check if EmailJS is configured
-    if (!process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 
-        !process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 
-        !process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID) {
-      toast.error('Contact form is temporarily unavailable. Please contact us directly through phone or email.');
-      return;
-    }
-
     if (!validateForm()) return;
 
     setIsSubmitting(true);
     try {
-      const response = await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message,
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-      );
+        body: JSON.stringify(formData),
+      });
 
-      if (response.status === 200) {
+      const data = await response.json();
+
+      if (response.ok) {
         toast.success('Message sent successfully!');
         setFormData({
           name: '',
@@ -96,6 +85,8 @@ const Contact = () => {
           subject: '',
           message: '',
         });
+      } else {
+        throw new Error(data.message || 'Failed to send message');
       }
     } catch (error) {
       console.error('Error sending email:', error);
@@ -105,16 +96,15 @@ const Contact = () => {
     }
   };
 
-  const inputClasses = "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm";
-  const labelClasses = "block text-sm font-medium text-gray-700 mb-1";
+  const inputClasses = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-400 transition-all duration-200";
 
   return (
     <>
       <Head>
-        <title>Contact Us - {companyInfo.name}</title>
+        <title>Contact Us - Excel Glass & Dorcen Glass</title>
         <meta 
           name="description" 
-          content="Get in touch with Excel Glass Inc. for premium glass etching services. Contact us for inquiries, quotes, or custom projects."
+          content="Get in touch with us for all your glass and aluminum needs. Contact us for quotes and inquiries."
         />
       </Head>
 
@@ -126,213 +116,171 @@ const Contact = () => {
       >
         <Toaster position="top-center" reverseOrder={false} />
         
-        {/* Hero Section */}
-        <div className="relative bg-primary text-white py-24">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80" />
-          </div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center"
-            >
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Get in Touch
-              </h1>
-              <p className="text-xl text-gray-100 max-w-2xl mx-auto">
-                We're here to help with your glass etching needs. Reach out to us for inquiries or custom projects.
-              </p>
-            </motion.div>
+        <div className="min-h-screen py-12 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Contact Section */}
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                  Contact Us
+                </h1>
+                <p className="text-lg text-gray-600 dark:text-gray-300">
+                  Get in touch with us for any inquiries or quotes
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Contact Information */}
+                <div className="space-y-8">
+                  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Information</h2>
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-4 text-gray-700 dark:text-gray-300">
+                        <PhoneIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                        <div>
+                          <p className="font-medium">Phone</p>
+                          {companyInfo.contact.telephone.map((phone, index) => (
+                            <p key={index}>{phone}</p>
+                          ))}
+                          <p>Fax: {companyInfo.contact.fax}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4 text-gray-700 dark:text-gray-300">
+                        <EnvelopeIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                        <div>
+                          <p className="font-medium">Email</p>
+                          {companyInfo.contact.email.map((email, index) => (
+                            <p key={index}>{email}</p>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4 text-gray-700 dark:text-gray-300">
+                        <MapPinIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                        <div>
+                          <p className="font-medium">Address</p>
+                          <p>{companyInfo.contact.address}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4 text-gray-700 dark:text-gray-300">
+                        <ClockIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                        <div>
+                          <p className="font-medium">Business Hours</p>
+                          <p>Monday - Friday: 8:00 AM - 5:00 PM</p>
+                          <p>Saturday: 8:00 AM - 12:00 PM</p>
+                          <p>Sunday: Closed</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Social Links */}
+                    <div className="mt-8">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Follow Us</h3>
+                      <SocialLinks className="text-blue-600 dark:text-blue-400" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Form */}
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send us a Message</h2>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className={inputClasses}
+                        placeholder="Your name"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Email *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={inputClasses}
+                        placeholder="your.email@example.com"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Phone *
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        id="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className={inputClasses}
+                        placeholder="Your phone number"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Subject
+                      </label>
+                      <input
+                        type="text"
+                        name="subject"
+                        id="subject"
+                        value={formData.subject}
+                        onChange={handleChange}
+                        className={inputClasses}
+                        placeholder="What is this about?"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Message *
+                      </label>
+                      <textarea
+                        name="message"
+                        id="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                        rows="5"
+                        className={inputClasses}
+                        placeholder="Your message here..."
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg
+                        hover:bg-blue-700 dark:hover:bg-blue-600
+                        focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        transition-colors duration-200"
+                    >
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              {/* Map Section */}
+              <div className="mt-12 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
+                <Map />
+              </div>
+            </div>
           </div>
         </div>
-
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* Contact Information */}
-              <div className="space-y-8">
-                <div className="bg-white rounded-xl shadow-lg p-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
-                  
-                  <div className="space-y-6">
-                    <div className="flex items-start space-x-4">
-                      <MapPinIcon className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                      <div>
-                        <h3 className="font-medium text-gray-900">Address</h3>
-                        <p className="text-gray-600 mt-1">{companyInfo.contact.address}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start space-x-4">
-                      <PhoneIcon className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                      <div>
-                        <h3 className="font-medium text-gray-900">Phone</h3>
-                        <div className="space-y-1 mt-1">
-                          {companyInfo.contact.telephone.map((phone, index) => (
-                            <p key={index} className="text-gray-600">{phone}</p>
-                          ))}
-                          <p className="text-gray-600">Fax: {companyInfo.contact.fax}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start space-x-4">
-                      <EnvelopeIcon className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                      <div>
-                        <h3 className="font-medium text-gray-900">Email</h3>
-                        <div className="space-y-1 mt-1">
-                          {companyInfo.contact.email.map((email, index) => (
-                            <p key={index} className="text-gray-600">{email}</p>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start space-x-4">
-                      <ClockIcon className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                      <div>
-                        <h3 className="font-medium text-gray-900">Business Hours</h3>
-                        <div className="space-y-1 mt-1">
-                          <p className="text-gray-600">Monday - Friday: 8:00 AM - 5:00 PM</p>
-                          <p className="text-gray-600">Saturday: 8:00 AM - 12:00 PM</p>
-                          <p className="text-gray-600">Sunday: Closed</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Map */}
-                <div className="bg-white rounded-xl shadow-lg p-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Location</h2>
-                  <div className="h-[400px] rounded-lg overflow-hidden">
-                    <Map />
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Form */}
-              <div className="bg-white rounded-xl shadow-lg p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {(!process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 
-                    !process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 
-                    !process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID) && (
-                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                      <p className="text-yellow-700">
-                        Contact form is temporarily unavailable. Please contact us directly through phone or email.
-                      </p>
-                    </div>
-                  )}
-                  <div>
-                    <label htmlFor="name" className={labelClasses}>Name *</label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className={inputClasses}
-                      placeholder="Your name"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className={labelClasses}>Email *</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={inputClasses}
-                      placeholder="your.email@example.com"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="phone" className={labelClasses}>Phone *</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className={inputClasses}
-                      placeholder="Your phone number"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="subject" className={labelClasses}>Subject</label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      className={inputClasses}
-                      placeholder="What is this about?"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className={labelClasses}>Message *</label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      rows="5"
-                      className={inputClasses}
-                      placeholder="Your message here..."
-                      required
-                    />
-                  </div>
-
-                  <motion.button
-                    type="submit"
-                    disabled={isSubmitting}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`w-full py-3 px-6 text-white font-medium rounded-lg 
-                      ${isSubmitting ? 'bg-primary/70' : 'bg-primary hover:bg-primary/90'} 
-                      transition-all duration-200 flex items-center justify-center space-x-2`}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                        <span>Sending...</span>
-                      </>
-                    ) : (
-                      <span>Send Message</span>
-                    )}
-                  </motion.button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Social Links */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h2 className="text-2xl font-playfair font-bold text-gray-900">
-              Connect With Us
-            </h2>
-            <p className="mt-2 text-gray-600">
-              Follow us on social media for updates and inspiration
-            </p>
-            <div className="mt-6">
-              <SocialLinks />
-            </div>
-          </div>
-        </section>
       </motion.main>
     </>
   );
