@@ -62,40 +62,44 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Check if EmailJS is configured
+    if (!process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 
+        !process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 
+        !process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID) {
+      toast.error('Contact form is temporarily unavailable. Please contact us directly through phone or email.');
+      return;
+    }
+
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
-
     try {
-      // Initialize EmailJS with environment variable
-      emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY);
-
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        from_phone: formData.phone,
-        subject: formData.subject,
-        message: formData.message,
-        to_name: companyInfo.name,
-      };
-
-      await emailjs.send(
+      const response = await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-        templateParams
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
       );
 
-      toast.success("Message sent successfully! We'll get back to you soon.");
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-      });
+      if (response.status === 200) {
+        toast.success('Message sent successfully!');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: '',
+        });
+      }
     } catch (error) {
       console.error('Error sending email:', error);
-      toast.error("Failed to send message. Please try again later.");
+      toast.error('Failed to send message. Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
@@ -213,6 +217,15 @@ const Contact = () => {
               <div className="bg-white rounded-xl shadow-lg p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {(!process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 
+                    !process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 
+                    !process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID) && (
+                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                      <p className="text-yellow-700">
+                        Contact form is temporarily unavailable. Please contact us directly through phone or email.
+                      </p>
+                    </div>
+                  )}
                   <div>
                     <label htmlFor="name" className={labelClasses}>Name *</label>
                     <input
