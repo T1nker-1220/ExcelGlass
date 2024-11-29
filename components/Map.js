@@ -158,13 +158,13 @@ const Map = () => {
     }
   ];
 
-  const { theme } = useTheme();
+  const { darkMode } = useTheme();
 
   return (
     <div 
       ref={mapRef} 
       className="h-[400px] w-full rounded-lg shadow-lg"
-      style={{ background: theme === 'dark' ? '#242f3e' : '#f0f0f0' }}
+      style={{ background: darkMode ? '#242f3e' : '#f0f0f0' }}
     />
   );
 };

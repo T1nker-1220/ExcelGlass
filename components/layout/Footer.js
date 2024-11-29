@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { companyInfo } from '../../data/company-info';
-import { MapPinIcon, PhoneIcon, EnvelopeIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { MapPinIcon, PhoneIcon, EnvelopeIcon, ChevronDownIcon, ClockIcon } from '@heroicons/react/24/outline';
 import SocialLinks from '../SocialLinks';
 
 const navigation = {
@@ -11,7 +11,6 @@ const navigation = {
     { name: 'About', href: '/about' },
     { name: 'Services', href: '/services' },
     { name: 'Portfolio', href: '/portfolio' },
-    { name: 'Contact', href: '/contact' },
   ],
   services: [
     { name: 'Glass Etching', href: '/services#etching' },
@@ -30,169 +29,255 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gray-900 dark:bg-black text-white" aria-labelledby="footer-heading">
+    <footer className="bg-gray-900 text-gray-300" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">Footer</h2>
       
       {/* Mobile Footer */}
-      <div className="lg:hidden">
-        {/* Essential Info */}
-        <div className="p-4 border-b border-gray-800">
-          <div className="flex items-center justify-between">
-            <div className="relative w-28 h-10">
-              <Image
-                src="/logo.webp"
-                alt="Excel Glass Logo"
-                fill
-                className="object-contain brightness-0 invert"
-                sizes="112px"
-              />
-            </div>
-            <div className="flex gap-4">
-              <a href={`tel:${companyInfo.contact.telephone[0]}`} className="p-2 rounded-full bg-blue-600 hover:bg-blue-700">
-                <PhoneIcon className="h-5 w-5" />
-              </a>
-              <a href={`mailto:${companyInfo.contact.email[0]}`} className="p-2 rounded-full bg-blue-600 hover:bg-blue-700">
-                <EnvelopeIcon className="h-5 w-5" />
-              </a>
-            </div>
+      <div className="lg:hidden px-4 py-8 space-y-8">
+        {/* Logo and Contact Buttons */}
+        <div className="flex items-center justify-between border-b border-gray-800 pb-6">
+          <div className="relative w-48 h-16">
+            <Image
+              src="/logo.png"
+              alt="Excel Glass Logo"
+              fill
+              sizes="192px"
+              className="object-contain"
+            />
+          </div>
+          <div className="flex gap-3">
+            <a 
+              href={`tel:${companyInfo.contact.telephone[0]}`}
+              className="p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
+              aria-label="Call us"
+            >
+              <PhoneIcon className="h-5 w-5" />
+            </a>
+            <a 
+              href={`mailto:${companyInfo.contact.email[0]}`}
+              className="p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
+              aria-label="Email us"
+            >
+              <EnvelopeIcon className="h-5 w-5" />
+            </a>
           </div>
         </div>
 
         {/* Collapsible Sections */}
-        {/* Quick Links */}
-        <div className="border-b border-gray-800">
-          <button
-            className="w-full p-4 flex justify-between items-center text-left"
-            onClick={() => toggleSection('links')}
-          >
-            <span className="font-semibold">Quick Links</span>
-            <ChevronDownIcon
-              className={`w-5 h-5 transform transition-transform ${expandedSection === 'links' ? 'rotate-180' : ''}`}
-            />
-          </button>
-          {expandedSection === 'links' && (
-            <div className="p-4 pt-0 grid grid-cols-2 gap-4">
-              {navigation.main.map((item) => (
-                <Link key={item.name} href={item.href}>
-                  <span className="text-sm text-gray-300 hover:text-white">
+        <div className="space-y-4">
+          {/* Quick Links Section */}
+          <div className="border-b border-gray-800">
+            <button
+              className="w-full py-4 flex justify-between items-center text-left"
+              onClick={() => toggleSection('links')}
+            >
+              <span className="text-white font-semibold">Quick Links</span>
+              <ChevronDownIcon
+                className={`w-5 h-5 transform transition-transform duration-200 ${
+                  expandedSection === 'links' ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+            {expandedSection === 'links' && (
+              <div className="pb-4 grid grid-cols-2 gap-4">
+                {navigation.main.map((item) => (
+                  <Link 
+                    key={item.name} 
+                    href={item.href}
+                    className="text-sm hover:text-white transition-colors duration-200"
+                  >
                     {item.name}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Contact Info */}
-        <div className="border-b border-gray-800">
-          <button
-            className="w-full p-4 flex justify-between items-center text-left"
-            onClick={() => toggleSection('contact')}
-          >
-            <span className="font-semibold">Contact Info</span>
-            <ChevronDownIcon
-              className={`w-5 h-5 transform transition-transform ${expandedSection === 'contact' ? 'rotate-180' : ''}`}
-            />
-          </button>
-          {expandedSection === 'contact' && (
-            <div className="p-4 pt-0 space-y-3 text-sm text-gray-300">
-              <div className="flex items-start gap-2">
-                <MapPinIcon className="h-5 w-5 text-gray-400 flex-shrink-0 mt-0.5" />
-                <span>{companyInfo.contact.address}</span>
+                  </Link>
+                ))}
               </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Business Hours</h3>
-                <div className="space-y-1">
-                  <p>Weekdays: {companyInfo.contact.businessHours.weekdays}</p>
-                  <p>Saturday: {companyInfo.contact.businessHours.saturday}</p>
-                  <p>Sunday: {companyInfo.contact.businessHours.sunday}</p>
+            )}
+          </div>
+
+          {/* Services Section */}
+          <div className="border-b border-gray-800">
+            <button
+              className="w-full py-4 flex justify-between items-center text-left"
+              onClick={() => toggleSection('services')}
+            >
+              <span className="text-white font-semibold">Our Services</span>
+              <ChevronDownIcon
+                className={`w-5 h-5 transform transition-transform duration-200 ${
+                  expandedSection === 'services' ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+            {expandedSection === 'services' && (
+              <div className="pb-4 grid grid-cols-2 gap-4">
+                {navigation.services.map((item) => (
+                  <Link 
+                    key={item.name} 
+                    href={item.href}
+                    className="text-sm hover:text-white transition-colors duration-200"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Contact Info Section */}
+          <div className="border-b border-gray-800">
+            <button
+              className="w-full py-4 flex justify-between items-center text-left"
+              onClick={() => toggleSection('contact')}
+            >
+              <span className="text-white font-semibold">Contact Information</span>
+              <ChevronDownIcon
+                className={`w-5 h-5 transform transition-transform duration-200 ${
+                  expandedSection === 'contact' ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+            {expandedSection === 'contact' && (
+              <div className="pb-4 space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPinIcon className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm">{companyInfo.contact.address}</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <PhoneIcon className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-1 text-sm">
+                    {companyInfo.contact.telephone.map((phone, index) => (
+                      <div key={index}>{phone}</div>
+                    ))}
+                    <div>Fax: {companyInfo.contact.fax}</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <EnvelopeIcon className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-1 text-sm">
+                    {companyInfo.contact.email.map((email, index) => (
+                      <div key={index}>{email}</div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <ClockIcon className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-1 text-sm">
+                    <div>Mon - Fri: {companyInfo.contact.businessHours.weekdays}</div>
+                    <div>Saturday: {companyInfo.contact.businessHours.saturday}</div>
+                    <div>Sunday: {companyInfo.contact.businessHours.sunday}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Social Links */}
-        <div className="p-4 flex justify-center">
-          <SocialLinks darkMode={true} />
+        <div className="pt-4">
+          <div className="flex justify-center">
+            <SocialLinks darkMode={true} />
+          </div>
         </div>
       </div>
 
       {/* Desktop Footer */}
-      <div className="hidden lg:block">
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-          <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+      <div className="hidden lg:block border-t border-gray-800">
+        <div className="mx-auto max-w-7xl px-8 py-12">
+          <div className="grid grid-cols-12 gap-8">
             {/* Company Info */}
-            <div className="space-y-4">
-              <div className="relative w-36 h-12">
+            <div className="col-span-4 space-y-8">
+              <div className="relative w-56 h-20">
                 <Image
-                  src="/logo.webp"
+                  src="/logo.png"
                   alt="Excel Glass Logo"
                   fill
-                  className="object-contain brightness-0 invert"
-                  sizes="144px"
+                  sizes="224px"
+                  className="object-contain"
                 />
               </div>
-              <div className="space-y-2 text-sm text-gray-300">
-                <div className="flex items-center gap-2">
-                  <MapPinIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                  <span>{companyInfo.contact.address}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <PhoneIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                  <span>Tel: {companyInfo.contact.telephone.join(' / ')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <EnvelopeIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <p className="text-sm">
+                    {companyInfo.description}
+                  </p>
                   <div>
-                    <div>{companyInfo.contact.email[1]}</div>
-                    <div>{companyInfo.contact.email[0]}</div>
+                    <SocialLinks darkMode={true} />
                   </div>
                 </div>
               </div>
-              {/* Business Hours */}
-              <div className="text-sm text-gray-300">
-                <h3 className="font-semibold text-white mb-2">Business Hours</h3>
-                <div className="space-y-1">
-                  <p>Weekdays: {companyInfo.contact.businessHours.weekdays}</p>
-                  <p>Saturday: {companyInfo.contact.businessHours.saturday}</p>
-                  <p>Sunday: {companyInfo.contact.businessHours.sunday}</p>
-                </div>
-              </div>
-              <div className="pt-2">
-                <SocialLinks darkMode={true} />
-              </div>
             </div>
 
-            {/* Navigation */}
-            <div className="mt-8 grid grid-cols-2 gap-8 lg:mt-0 lg:col-span-2">
-              <div>
-                <h3 className="text-sm font-semibold text-white">Company</h3>
-                <ul className="mt-2 space-y-2">
-                  {navigation.main.map((item) => (
-                    <li key={item.name}>
-                      <Link href={item.href}>
-                        <span className="text-sm text-gray-300 hover:text-white cursor-pointer">
-                          {item.name}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-white">Services</h3>
-                <ul className="mt-2 space-y-2">
-                  {navigation.services.map((item) => (
-                    <li key={item.name}>
-                      <Link href={item.href}>
-                        <span className="text-sm text-gray-300 hover:text-white cursor-pointer">
-                          {item.name}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+            {/* Quick Links */}
+            <div className="col-span-2">
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+                Quick Links
+              </h3>
+              <ul className="space-y-3">
+                {navigation.main.map((item) => (
+                  <li key={item.name}>
+                    <Link 
+                      href={item.href}
+                      className="text-sm hover:text-white transition-colors duration-200"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Services */}
+            <div className="col-span-2">
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+                Services
+              </h3>
+              <ul className="space-y-3">
+                {navigation.services.map((item) => (
+                  <li key={item.name}>
+                    <Link 
+                      href={item.href}
+                      className="text-sm hover:text-white transition-colors duration-200"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div className="col-span-4">
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+                Contact Information
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPinIcon className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm">{companyInfo.contact.address}</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <PhoneIcon className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-1 text-sm">
+                    {companyInfo.contact.telephone.map((phone, index) => (
+                      <div key={index}>{phone}</div>
+                    ))}
+                    <div>Fax: {companyInfo.contact.fax}</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <EnvelopeIcon className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-1 text-sm">
+                    {companyInfo.contact.email.map((email, index) => (
+                      <div key={index}>{email}</div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <ClockIcon className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-1 text-sm">
+                    <div>Mon - Fri: {companyInfo.contact.businessHours.weekdays}</div>
+                    <div>Saturday: {companyInfo.contact.businessHours.saturday}</div>
+                    <div>Sunday: {companyInfo.contact.businessHours.sunday}</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -200,8 +285,12 @@ const Footer = () => {
       </div>
 
       {/* Copyright */}
-      <div className="border-t border-gray-800 py-4 text-center text-sm text-gray-400">
-        <p>&copy; {currentYear} {companyInfo.name}. All rights reserved.</p>
+      <div className="bg-gray-950 py-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-sm">
+            &copy; {currentYear} {companyInfo.name}. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );

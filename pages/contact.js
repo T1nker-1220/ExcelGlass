@@ -1,111 +1,19 @@
-import { useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
-import toast, { Toaster } from 'react-hot-toast';
 import { PhoneIcon, EnvelopeIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { companyInfo } from '../data/company-info';
-import Link from 'next/link';
-
-// Dynamically import the Map component
-const Map = dynamic(() => import('../components/Map'), {
-  ssr: false,
-  loading: () => (
-    <div className="h-[400px] w-full flex items-center justify-center bg-gray-100 rounded-lg">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-    </div>
-  ),
-});
-
-const SocialLinks = dynamic(() => import('../components/SocialLinks'), {
-  loading: () => <div className="h-10 bg-gray-100 animate-pulse rounded-lg"></div>
-})
 
 const Contact = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleEmailClick = (email) => {
+    window.location.href = `mailto:${email}?subject=Inquiry for Excel Glass`;
   };
-
-  const validateForm = () => {
-    if (!formData.name.trim()) {
-      toast.error('Please enter your name');
-      return false;
-    }
-    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      toast.error('Please enter a valid email address');
-      return false;
-    }
-    if (!formData.phone.trim()) {
-      toast.error('Please enter your phone number');
-      return false;
-    }
-    if (!formData.message.trim()) {
-      toast.error('Please enter your message');
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-
-    setIsSubmitting(true);
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success('Message sent successfully!');
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          subject: '',
-          message: '',
-        });
-      } else {
-        throw new Error(data.message || 'Failed to send message');
-      }
-    } catch (error) {
-      console.error('Error sending email:', error);
-      toast.error('Failed to send message. Please try again later.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const inputClasses = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-400 transition-all duration-200";
 
   return (
     <>
       <Head>
-        <title>Contact Us - Excel Glass & Dorcen Glass</title>
-        <meta 
-          name="description" 
-          content="Get in touch with us for all your glass and aluminum needs. Contact us for quotes and inquiries."
-        />
+        <title>Contact Us - Excel Glass</title>
+        <meta name="description" content="Get in touch with Excel Glass for all your glass and aluminum needs." />
       </Head>
 
       <motion.main
@@ -114,172 +22,143 @@ const Contact = () => {
         exit={{ opacity: 0 }}
         className="flex-grow"
       >
-        <Toaster position="top-center" reverseOrder={false} />
-        
-        <div className="min-h-screen py-12 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Contact Section */}
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-12">
-                <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                  Contact Us
-                </h1>
-                <p className="text-lg text-gray-600 dark:text-gray-300">
-                  Get in touch with us for any inquiries or quotes
-                </p>
-              </div>
+        <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl sm:tracking-tight lg:text-6xl"
+            >
+              Get in Touch
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="mt-5 max-w-xl mx-auto text-xl text-gray-500 dark:text-gray-300"
+            >
+              We're here to help with all your glass and aluminum needs
+            </motion.p>
+          </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Contact Information */}
-                <div className="space-y-8">
-                  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Information</h2>
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-4 text-gray-700 dark:text-gray-300">
-                        <PhoneIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                        <div>
-                          <p className="font-medium">Phone</p>
-                          {companyInfo.contact.telephone.map((phone, index) => (
-                            <p key={index}>{phone}</p>
-                          ))}
-                          <p>Fax: {companyInfo.contact.fax}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-4 text-gray-700 dark:text-gray-300">
-                        <EnvelopeIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                        <div>
-                          <p className="font-medium">Email</p>
-                          {companyInfo.contact.email.map((email, index) => (
-                            <p key={index}>{email}</p>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-4 text-gray-700 dark:text-gray-300">
-                        <MapPinIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                        <div>
-                          <p className="font-medium">Address</p>
-                          <p>{companyInfo.contact.address}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-4 text-gray-700 dark:text-gray-300">
-                        <ClockIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                        <div>
-                          <p className="font-medium">Business Hours</p>
-                          <p>Monday - Friday: 8:00 AM - 5:00 PM</p>
-                          <p>Saturday: 8:00 AM - 12:00 PM</p>
-                          <p>Sunday: Closed</p>
-                        </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-16"
+          >
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              {/* Contact Information */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Information</h2>
+                <div className="space-y-6">
+                  {/* Phone Numbers */}
+                  <div className="flex items-start">
+                    <PhoneIcon className="h-6 w-6 text-blue-500 mt-1" />
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">Phone</p>
+                      <div className="space-y-2">
+                        {companyInfo.contact.telephone.map((phone, index) => (
+                          <a 
+                            key={index}
+                            href={`tel:${phone}`} 
+                            className="block text-base text-gray-500 dark:text-gray-300 hover:text-blue-500"
+                          >
+                            {phone}
+                          </a>
+                        ))}
+                        <p className="text-base text-gray-500 dark:text-gray-300">
+                          Fax: {companyInfo.contact.fax}
+                        </p>
                       </div>
                     </div>
-                    
-                    {/* Social Links */}
-                    <div className="mt-8">
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Follow Us</h3>
-                      <SocialLinks className="text-blue-600 dark:text-blue-400" />
+                  </div>
+
+                  {/* Email Addresses */}
+                  <div className="flex items-start">
+                    <EnvelopeIcon className="h-6 w-6 text-blue-500 mt-1" />
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">Email</p>
+                      <div className="space-y-2">
+                        {companyInfo.contact.email.map((email, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleEmailClick(email)}
+                            className="block text-base text-gray-500 dark:text-gray-300 hover:text-blue-500"
+                          >
+                            {email}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Address */}
+                  <div className="flex items-start">
+                    <MapPinIcon className="h-6 w-6 text-blue-500 mt-1" />
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">Address</p>
+                      <p className="text-base text-gray-500 dark:text-gray-300">
+                        {companyInfo.contact.address}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Business Hours */}
+                  <div className="flex items-start">
+                    <ClockIcon className="h-6 w-6 text-blue-500 mt-1" />
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">Business Hours</p>
+                      <div className="text-base text-gray-500 dark:text-gray-300">
+                        <p>Monday - Friday: {companyInfo.contact.businessHours.weekdays}</p>
+                        <p>Saturday: {companyInfo.contact.businessHours.saturday}</p>
+                        <p>Sunday: {companyInfo.contact.businessHours.sunday}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Contact Form */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send us a Message</h2>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Name *
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className={inputClasses}
-                        placeholder="Your name"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className={inputClasses}
-                        placeholder="your.email@example.com"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Phone *
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        id="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className={inputClasses}
-                        placeholder="Your phone number"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Subject
-                      </label>
-                      <input
-                        type="text"
-                        name="subject"
-                        id="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        className={inputClasses}
-                        placeholder="What is this about?"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Message *
-                      </label>
-                      <textarea
-                        name="message"
-                        id="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        rows="5"
-                        className={inputClasses}
-                        placeholder="Your message here..."
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg
-                        hover:bg-blue-700 dark:hover:bg-blue-600
-                        focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400
-                        disabled:opacity-50 disabled:cursor-not-allowed
-                        transition-colors duration-200"
+                {/* Social Media */}
+                <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Follow Us</h3>
+                  <div className="flex space-x-4">
+                    <a
+                      href={companyInfo.contact.socialMedia.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-500"
                     >
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
-                    </button>
-                  </form>
+                      Facebook
+                    </a>
+                    <a
+                      href={companyInfo.contact.socialMedia.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-500"
+                    >
+                      Instagram
+                    </a>
+                  </div>
                 </div>
               </div>
 
               {/* Map Section */}
-              <div className="mt-12 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
-                <Map />
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Visit Us</h2>
+                <div className="aspect-w-16 aspect-h-12">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15448.388202715432!2d121.00030542892534!3d14.536440981361782!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c92e14188b3b%3A0xc387f75dc7ab33be!2sExcel%20Glass%20Inc.!5e0!3m2!1sen!2sph!4v1732853985489!5m2!1sen!2sph"
+                    className="w-full h-[500px] rounded-lg"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </motion.main>
     </>

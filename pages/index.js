@@ -23,7 +23,7 @@ export default function Home() {
     setIsVisible(true);
     // Preload critical images
     if (typeof window !== 'undefined') {
-      const imageUrls = ['/logo.webp', ...servicesData.excelGlass.services.slice(0, 3).map(s => s.image)];
+      const imageUrls = ['/logo.png', ...servicesData.excelGlass.services.slice(0, 3).map(s => s.image)];
       Promise.all(imageUrls.map(url => {
         return new Promise((resolve) => {
           const img = new window.Image();
@@ -59,77 +59,85 @@ export default function Home() {
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"></div>
           <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-300/20 rounded-full blur-3xl"></div>
 
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
               {/* Text Content */}
               <div className="text-center lg:text-left">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="space-y-6"
+                  className="space-y-4"
                 >
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
                     Transform Your Space With 
-                    <span className="block mt-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-blue-400">
+                    <span className="block mt-1 bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-blue-400">
                       Premium Glass Solutions
                     </span>
                   </h1>
-                  <p className="text-lg sm:text-xl text-blue-100/90 max-w-2xl mx-auto lg:mx-0">
+                  <p className="text-base sm:text-lg text-blue-100/90 max-w-2xl mx-auto lg:mx-0">
                     Elevate your environment with our expert glass etching and installation services. 
                     Crafting excellence since 1994.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                     <Link
                       href="/portfolio"
-                      className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-500 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25"
+                      className="inline-flex items-center justify-center px-6 py-2 text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-500 transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
                     >
                       View Our Work
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
                     </Link>
                     <Link
                       href="/contact"
-                      className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-blue-100 bg-blue-900/50 hover:bg-blue-800/50 backdrop-blur-sm transition-all duration-200 transform hover:scale-105"
+                      className="inline-flex items-center justify-center px-6 py-2 text-base font-medium rounded-lg text-blue-100 bg-blue-900/50 hover:bg-blue-800/50 transition-all duration-200 shadow-lg hover:shadow-blue-900/25"
                     >
-                      Contact Us
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                      </svg>
+                      Get a Quote
                     </Link>
                   </div>
                 </motion.div>
               </div>
 
-              {/* Image/Showcase Section */}
+              {/* Product Images Grid */}
               <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="relative hidden lg:block"
+                className="grid grid-cols-1 gap-4"
               >
-                <div className="relative w-full h-[600px] rounded-2xl overflow-hidden shadow-2xl transform -rotate-2">
+                {/* First Row */}
+                <div className="relative w-full h-[250px] rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
                   <Image
-                    src="/products11.jpg"
-                    alt="Glass Showcase"
-                    layout="fill"
-                    objectFit="cover"
-                    className="transform hover:scale-105 transition-transform duration-700"
+                    src="/herosection.jpg"
+                    alt="Professional Glass Installation and Design"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
                     priority
+                    quality={85}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <h3 className="text-lg font-semibold">Professional Glass Solutions</h3>
+                      <p className="text-sm text-gray-200">Custom glass installations and expert craftsmanship</p>
+                    </div>
+                  </div>
                 </div>
-                {/* Floating Elements */}
-                <div className="absolute -bottom-6 -right-6 w-48 h-48 rounded-lg overflow-hidden shadow-lg transform rotate-6">
+
+                {/* Second Row */}
+                <div className="relative w-full h-[250px] rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
                   <Image
-                    src="/staffs.jpg"
-                    alt="Detail Shot"
-                    layout="fill"
-                    objectFit="cover"
-                    priority
+                    src="/frontcompany.jpg"
+                    alt="Artistic Glass"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                    quality={85}
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <h3 className="text-lg font-semibold">Artistic Glass</h3>
+                      <p className="text-sm text-gray-200">Custom Designs</p>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </div>
@@ -139,7 +147,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-8"
+              className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 bg-white/5 backdrop-blur-sm rounded-xl p-6"
             >
               {[
                 { number: "29+", label: "Years Experience" },
@@ -147,9 +155,9 @@ export default function Home() {
                 { number: "100%", label: "Client Satisfaction" },
                 { number: "24/7", label: "Support" }
               ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-3xl font-bold text-white mb-2">{stat.number}</div>
-                  <div className="text-blue-200/80 text-sm">{stat.label}</div>
+                <div key={index} className="text-center p-4 rounded-lg hover:bg-white/10 transition-colors duration-300">
+                  <div className="text-2xl sm:text-3xl font-bold text-white mb-1">{stat.number}</div>
+                  <div className="text-sm sm:text-base text-blue-200/90">{stat.label}</div>
                 </div>
               ))}
             </motion.div>
@@ -175,14 +183,14 @@ export default function Home() {
                     custom={index}
                     className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
                   >
-                    <div className="relative h-40 sm:h-48">
+                    <div className="relative h-40 sm:h-48 w-full">
                       <Image
                         src={service.image}
                         alt={service.name}
-                        layout="fill"
-                        objectFit="cover"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         priority={index < 3}
-                        className="transition-transform duration-300 group-hover:scale-110"
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
                       />
                     </div>
                     <div className="p-4 sm:p-6">
@@ -307,6 +315,7 @@ export default function Home() {
           </div>
         </section>
       </motion.div>
+
     </>
   );
 }

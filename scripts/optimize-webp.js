@@ -4,8 +4,8 @@ const path = require('path');
 async function optimizeLogo() {
   try {
     // Read the existing WebP file
-    const inputPath = path.join(__dirname, '../public/logo.webp');
-    const outputPath = path.join(__dirname, '../public/logo-hd.webp');
+    const inputPath = path.join(__dirname, '../public/logo.png');
+    const outputPath = path.join(__dirname, '../public/logo-png');
 
     await sharp(inputPath)
       .resize(512, 512, {

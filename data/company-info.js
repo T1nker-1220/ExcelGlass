@@ -12,11 +12,10 @@ export const companyInfo = {
     socialMedia: {
       facebook: "https://www.facebook.com/excelglass",
       instagram: "https://www.instagram.com/excelglassph",
-      linkedin: "https://www.linkedin.com/company/excel-glass-inc"
     },
     businessHours: {
       weekdays: "8:00 AM - 5:00 PM",
-      saturday: "8:00 AM - 12:00 PM",
+      saturday: "8:00 AM - 4:00 PM",
       sunday: "Closed"
     }
   },
