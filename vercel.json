@@ -1,42 +1,11 @@
 {
   "version": 2,
-  "buildCommand": "npm run vercel-build",
-  "devCommand": "npm run dev",
+  "buildCommand": "npm run build",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "builds": [
-    {
-      "src": "next.config.js",
-      "use": "@vercel/next"
-    }
-  ],
   "env": {
     "NEXT_PUBLIC_FACEBOOK_URL": "https://www.facebook.com/excelglass",
     "NEXT_PUBLIC_INSTAGRAM_URL": "https://www.instagram.com/excelglassph",
-    "NODE_ENV": "production",
-    "NEXT_TELEMETRY_DISABLED": "1"
-  },
-  "github": {
-    "silent": true,
-    "autoAlias": true
-  },
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
-      ]
-    }
-  ]
+    "NODE_ENV": "production"
+  }
 }
