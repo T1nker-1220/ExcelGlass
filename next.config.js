@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    unoptimized: true,
+    unoptimized: false,
     remotePatterns: [
       {
         protocol: 'https',
@@ -13,7 +13,8 @@ const nextConfig = {
   },
   experimental: {
     scrollRestoration: true
-  }
+  },
+  output: 'standalone'
 }
 
 module.exports = nextConfig
