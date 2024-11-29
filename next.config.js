@@ -13,9 +13,18 @@ const nextConfig = {
     domains: ['*']
   },
   experimental: {
-    scrollRestoration: true
+    scrollRestoration: true,
+    optimizeCss: true,
+    optimizePackageImports: ['@heroicons/react']
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production'
   },
   output: 'standalone',
+  poweredByHeader: false,
+  generateEtags: true,
+  compress: true,
+  productionBrowserSourceMaps: false,
   typescript: {
     ignoreBuildErrors: true
   },
