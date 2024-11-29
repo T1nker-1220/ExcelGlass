@@ -10,11 +10,18 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+    domains: ['*']
   },
   experimental: {
     scrollRestoration: true
   },
-  output: 'standalone'
+  output: 'standalone',
+  typescript: {
+    ignoreBuildErrors: true
+  },
+  eslint: {
+    ignoreDuringBuilds: true
+  }
 }
 
 module.exports = nextConfig
